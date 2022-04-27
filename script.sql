@@ -1,118 +1,135 @@
-create table Department (
-	departmentID INT, 
-    departmentName VARCHAR(200),
-    Primary key(departmentID)
-);
-create table Manager (
-	managerID INT, 
-    departmentID INT,
-    Primary key(managerID), 
-    foreign key(departmentID) references Department(departmentID)
+CREATE schema Hospital;
+
+CREATE TABLE Hospital.Department (
+	departmentID INT NOT NULL, 
+    departmentName VARCHAR(200) NOT NULL,
+    PRIMARY KEY(departmentID)
 );
 
-create table Staff(
-	staffID INT, 
-    departmentID INT, 
-    fname VARCHAR(200), 
-    lname VARCHAR(200), 
-    email VARCHAR(30), 
-    phoneNumber INT,
-    primary Key(staffID), 
-    foreign key(departmentID) references Department(departmentID)
+CREATE TABLE Hospital.Manager (
+	managerID INT NOT NULL, 
+    departmentID INT NOT NULL,
+    PRIMARY KEY(managerID), 
+    FOREIGN KEY(departmentID) REFERENCES Hospital.Department(departmentID)
 );
 
-create table Schedule(
-	ScheduleID INT, 
-    StartingTime DATETIME, 
-    FinishTime DATETIME,
-    primary key(ScheduleID)
-);
-create table MedicalStaff(
-	MedStaffID INT, 
-    scheduleID INT,
-    primary key(MEdStaffID),
-    foreign key(scheduleID) references Schedule(ScheduleID)
-);
-create table Doctor(
-	DoctorID INT, specialization VARCHAR(200),
-    primary key(DoctorID), 
-    foreign key(DoctorID) references MedicalStaff(MedStaffID)
+CREATE TABLE Hospital.Staff(
+	staffID INT NOT NULL, 
+    departmentID INT NOT NULL, 
+    fname VARCHAR(200) NOT NULL, 
+    lname VARCHAR(200) NOT NULL, 
+    email VARCHAR(30) NOT NULL, 
+    phoneNumber INT NOT NULL,
+    PRIMARY KEY(staffID), 
+    FOREIGN KEY(departmentID) REFERENCES Hospital.Department(departmentID)
 );
 
-create table Nurse(
-	NurseID INT,
-    primary key(NurseID),
-    foreign key(NurseID) references MedicalStaff(MedStaffID)
+CREATE TABLE Hospital.Schedule(
+	ScheduleID INT NOT NULL, 
+    StartingTime DATETIME NOT NULL, 
+    FinishTime DATETIME NOT NULL,
+    PRIMARY KEY(ScheduleID)
 );
-create table WorksWith(
-	NurseID INT, 
-    DoctorID INT,
-    Primary Key(NurseID, DoctorID),
-    foreign key(NurseID) references Nurse(NurseID),
-    foreign key(DoctorID) references Doctor(DoctorID)
+
+CREATE TABLE Hospital.MedicalStaff(
+	MedStaffID INT NOT NULL, 
+    scheduleID INT NOT NULL,
+    PRIMARY KEY(MEdStaffID),
+    FOREIGN KEY(scheduleID) REFERENCES Hospital.Schedule(ScheduleID)
 );
-create table Medicine(
-	MedicineID INT, 
-    name VARCHAR(200), 
-    inventory INT, 
-    Description VARCHAR(200),
-    primary key(MedicineID)
+
+CREATE TABLE Hospital.Doctor(
+	DoctorID INT NOT NULL, 
+    specialization VARCHAR(200) NOT NULL,
+    PRIMARY KEY(DoctorID), 
+    FOREIGN KEY(DoctorID) REFERENCES Hospital.MedicalStaff(MedStaffID)
 );
-create table Secretary(
-	SecretaryID INT, 
-    primary Key(SecretaryID),
-    foreign key(SecretaryID) references Staff(StaffID)
+
+CREATE TABLE Hospital.Nurse(
+	NurseID INT NOT NULL,
+    PRIMARY KEY(NurseID),
+    FOREIGN KEY(NurseID) REFERENCES Hospital.MedicalStaff(MedStaffID)
 );
-create table Room(
-	RoomID INT, RoomNumber INT, Equipement VARCHAR(200),
-    primary key(RoomID)
+
+CREATE TABLE Hospital.WorksWith(
+	NurseID INT NOT NULL, 
+    DoctorID INT NOT NULL,
+    PRIMARY KEY(NurseID, DoctorID),
+    FOREIGN KEY(NurseID) REFERENCES Hospital.Nurse(NurseID),
+    FOREIGN KEY(DoctorID) REFERENCES Hospital.Doctor(DoctorID)
 );
-create Table Appointment(
-	AppointmentID INT,
-    SecretaryID INT, 
-    ScheduleID INT, 
-    RoomID INT, 
-    StartingTime DATETIME, 
-    FinishTime DATETIME,
-    Primary Key(AppointmentID),
-    foreign key(SecretaryID) references Secretary(SecretaryID),
-    foreign Key(ScheduleID) references Schedule(ScheduleID),
-    foreign key(RoomID) references Room(RoomID)
+
+CREATE TABLE Hospital.Medicine(
+	MedicineID INT NOT NULL, 
+    name VARCHAR(200) NOT NULL, 
+    inventory INT NOT NULL, 
+    Description VARCHAR(200) NOT NULL,
+    PRIMARY KEY(MedicineID)
 );
-create table Patient(
-	PatientID INT, 
-    fname VARCHAR(200), 
-    lname VARCHAR(200), 
-    email VARCHAR(30), 
-    phoneNumber VARCHAR(200),
-    primary key(PatientID)
+
+CREATE TABLE Hospital.Secretary(
+	SecretaryID INT NOT NULL, 
+    PRIMARY KEY(SecretaryID),
+    FOREIGN KEY(SecretaryID) REFERENCES Hospital.Staff(StaffID)
 );
-create table Insurance(
-	InsuranceNumber INT,
-    PatientID INT,
-    class VARCHAR(100),
-    company VARCHAR(200),
-    Primary Key(InsuranceNumber),
-    foreign key(PatientID) references Patient(PatientID)
+
+CREATE TABLE Hospital.Room(
+	RoomID INT NOT NULL,
+    RoomNumber INT NOT NULL,
+    Equipement VARCHAR(200) NOT NULL,
+    PRIMARY KEY(RoomID)
 );
-create table PatientDependent(
-	DependentID INT, 
-    PatientID INT,
-    fname VARCHAR(200), 
-    lname VARCHAR(200), 
-    relation VARCHAR(100),
-    primary key(DependentID, PatientID),
-    foreign key(PatientID) references Patient(PatientID)
+
+CREATE TABLE Hospital.Appointment(
+	AppointmentID INT NOT NULL,
+    SecretaryID INT NOT NULL, 
+    ScheduleID INT NOT NULL, 
+    RoomID INT NOT NULL, 
+    StartingTime DATETIME NOT NULL, 
+    FinishTime DATETIME NOT NULL,
+    PRIMARY KEY(AppointmentID),
+    FOREIGN KEY(SecretaryID) REFERENCES Hospital.Secretary(SecretaryID),
+    FOREIGN KEY(ScheduleID) REFERENCES Hospital.Schedule(ScheduleID),
+    FOREIGN KEY(RoomID) REFERENCES Hospital.Room(RoomID)
 );
-create table Makes(
-	MedicineID INT,
-    DoctorID INT,
-    AppoINTmentID INT,
-    PatientID INT, 
-    Bill INT,
-    primary key(MedicineID, DoctorID, AppoINTmentID, PatientID),
-    foreign key(MedicineID) references Medicine(MedicineID),
-    foreign key(DoctorID) references Doctor(DoctorID),
-    foreign key(AppoINTmentID) references AppoINTment(AppoINTmentID),
-    foreign key(PatientID) references Patient(PatientID)
+
+CREATE TABLE Hospital.Patient(
+	CPatientID INT NOT NULL, 
+    fname VARCHAR(200) NOT NULL, 
+    lname VARCHAR(200) NOT NULL, 
+    email VARCHAR(30) NOT NULL, 
+    phoneNumber VARCHAR(200) NOT NULL,
+    PRIMARY KEY(PatientID)
+);
+
+CREATE TABLE Hospital.Insurance(
+	InsuranceNumber INT NOT NULL,
+    PatientID INT NOT NULL,
+    class VARCHAR(100) NOT NULL,
+    company VARCHAR(200) NOT NULL,
+    PRIMARY KEY(InsuranceNumber),
+    FOREIGN KEY(PatientID) REFERENCES Hospital.Patient(PatientID)
+);
+
+CREATE TABLE Hospital.PatientDependent(
+	DependentID INT NOT NULL, 
+    PatientID INT NOT NULL,
+    fname VARCHAR(200)  NOT NULL, 
+    lname VARCHAR(200)  NOT NULL, 
+    relation VARCHAR(100) NOT NULL,
+    PRIMARY KEY(DependentID, PatientID),
+    FOREIGN KEY(PatientID) REFERENCES Hospital.Patient(PatientID)
+);
+
+CREATE TABLE Hospital.Makes(
+	MedicineID INT NOT NULL,
+    DoctorID INT NOT NULL,
+    AppointmentID INT NOT NULL,
+    PatientID INT NOT NULL, 
+    Bill INT NULL,
+    PRIMARY KEY(MedicineID, DoctorID, AppointmentID, PatientID),
+    FOREIGN KEY(MedicineID) REFERENCES Hospital.Medicine(MedicineID),
+    FOREIGN KEY(DoctorID) REFERENCES Hospital.Doctor(DoctorID),
+    FOREIGN KEY(AppointmentID) REFERENCES Hospital.Appointment(AppointmentID),
+    FOREIGN KEY(PatientID) REFERENCES Hospital.Patient(PatientID)
 );
