@@ -105,8 +105,6 @@ CREATE TABLE Hospital.Appointment(
     FOREIGN KEY(SecretaryID) REFERENCES Hospital.Secretary(SecretaryID),
     FOREIGN KEY(ScheduleID) REFERENCES Hospital.Schedule(ScheduleID),
     FOREIGN KEY(RoomID) REFERENCES Hospital.Room(RoomID)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE
 );
 
 CREATE TABLE Hospital.Patient(
@@ -142,7 +140,7 @@ CREATE TABLE Hospital.PatientDependent(
 );
 
 CREATE TABLE Hospital.Makes(
-	MedicineID INT(3) ZEROFILL NOT NULL auto_increment,
+	MedicineID INT(3) ZEROFILL NOT NULL,
     DoctorID INT(5) ZEROFILL NOT NULL,
     AppointmentID INT NOT NULL,
     PatientID INT(5) ZEROFILL NOT NULL, 
@@ -183,6 +181,15 @@ INSERT INTO hospital.Staff(departmentID,fname,lname,email,phoneNumber) VALUES(2,
 INSERT INTO hospital.Staff(departmentID,fname,lname,email,phoneNumber) VALUES(4,"Axel","Hope","axelhope@gmail.com","+96176563459");
 
 
+INSERT INTO hospital.room (RoomNumber,Equipement)VALUES("101","");
+INSERT INTO hospital.room (RoomNumber,Equipement)VALUES("121","");
+INSERT INTO hospital.room (RoomNumber,Equipement)VALUES("141","");
+INSERT INTO hospital.room (RoomNumber,Equipement)VALUES("151","");
+INSERT INTO hospital.room (RoomNumber,Equipement)VALUES("153","");
+INSERT INTO hospital.room (RoomNumber,Equipement)VALUES("189","");
+INSERT INTO hospital.room (RoomNumber,Equipement)VALUES("203","");
+INSERT INTO hospital.room (RoomNumber,Equipement)VALUES("305","");
+
 INSERT INTO hospital.manager VALUES(00001,1);
 INSERT INTO hospital.manager VALUES(00002,2);
 INSERT INTO hospital.manager VALUES(00003,3);
@@ -205,15 +212,15 @@ INSERT INTO hospital.schedule(StartingTime,FinishTime) VALUES("2022-06-03 07:00:
 INSERT INTO hospital.schedule(StartingTime,FinishTime) VALUES("2022-07-03 10:00:00","2015-07-03 18:00:00");
 
 INSERT INTO hospital.Appointment(SecretaryID,ScheduleID,RoomID,StartingTime,FinishTime) VALUES(00018,1,1,"2022-05-03 07:00:00","2015-05-03 07:30:00");
-INSERT INTO hospital.Appointment(SecretaryID,ScheduleID,RoomID,StartingTime,FinishTime) VALUES(00013,1,2,"2022-05-03 08:00:00","2015-05-03 09:00:00");
-INSERT INTO hospital.Appointment(SecretaryID,ScheduleID,RoomID,StartingTime,FinishTime) VALUES(00012,1,5,"2022-05-03 10:00:00","2015-05-03 11:30:00");
+INSERT INTO hospital.Appointment(SecretaryID,ScheduleID,RoomID,StartingTime,FinishTime) VALUES(00018,1,4,"2022-05-03 10:00:00","2015-05-03 11:30:00");
 INSERT INTO hospital.Appointment(SecretaryID,ScheduleID,RoomID,StartingTime,FinishTime) VALUES(00013,2,1,"2022-05-03 09:00:00","2015-05-03 10:30:00");
+INSERT INTO hospital.Appointment(SecretaryID,ScheduleID,RoomID,StartingTime,FinishTime) VALUES(00013,1,2,"2022-05-03 08:00:00","2015-05-03 09:00:00");
 INSERT INTO hospital.Appointment(SecretaryID,ScheduleID,RoomID,StartingTime,FinishTime) VALUES(00014,2,5,"2022-05-03 12:00:00","2015-05-03 13:00:00");
 INSERT INTO hospital.Appointment(SecretaryID,ScheduleID,RoomID,StartingTime,FinishTime) VALUES(00016,2,1,"2022-05-03 13:00:00","2015-05-03 14:00:00");
 INSERT INTO hospital.Appointment(SecretaryID,ScheduleID,RoomID,StartingTime,FinishTime) VALUES(00014,3,3,"2022-05-03 06:00:00","2015-05-03 07:30:00");
 INSERT INTO hospital.Appointment(SecretaryID,ScheduleID,RoomID,StartingTime,FinishTime) VALUES(00015,3,4,"2022-05-03 07:00:00","2015-05-03 07:30:00");
 INSERT INTO hospital.Appointment(SecretaryID,ScheduleID,RoomID,StartingTime,FinishTime) VALUES(00018,5,2,"2022-05-03 07:00:00","2015-05-03 07:30:00");
-INSERT INTO hospital.Appointment(SecretaryID,ScheduleID,RoomID,StartingTime,FinishTime) VALUES(00012,6,1,"2022-05-03 07:00:00","2015-05-03 07:30:00");
+INSERT INTO hospital.Appointment(SecretaryID,ScheduleID,RoomID,StartingTime,FinishTime) VALUES(00016,6,1,"2022-05-03 07:00:00","2015-05-03 07:30:00");
 INSERT INTO hospital.Appointment(SecretaryID,ScheduleID,RoomID,StartingTime,FinishTime) VALUES(00018,3,2,"2022-05-03 07:00:00","2015-05-03 07:30:00");
 INSERT INTO hospital.Appointment(SecretaryID,ScheduleID,RoomID,StartingTime,FinishTime) VALUES(00016,4,3,"2022-05-03 07:00:00","2015-05-03 07:30:00");
 INSERT INTO hospital.Appointment(SecretaryID,ScheduleID,RoomID,StartingTime,FinishTime) VALUES(00014,4,6,"2022-05-03 07:00:00","2015-05-03 07:30:00");
@@ -246,14 +253,6 @@ INSERT INTO hospital.WorksWith(NurseID,DoctorID) VALUES(00012,00008);
 
 
 
-INSERT INTO hospital.room (RoomNumber,Equipement)VALUES("101","");
-INSERT INTO hospital.room (RoomNumber,Equipement)VALUES("121","");
-INSERT INTO hospital.room (RoomNumber,Equipement)VALUES("141","");
-INSERT INTO hospital.room (RoomNumber,Equipement)VALUES("151","");
-INSERT INTO hospital.room (RoomNumber,Equipement)VALUES("153","");
-INSERT INTO hospital.room (RoomNumber,Equipement)VALUES("189","");
-INSERT INTO hospital.room (RoomNumber,Equipement)VALUES("203","");
-INSERT INTO hospital.room (RoomNumber,Equipement)VALUES("305","");
 
 
 
@@ -342,3 +341,19 @@ INSERT INTO hospital.PatientDependent(PatientID,fname,lname,relation) VALUES(000
 INSERT INTO hospital.PatientDependent(PatientID,fname,lname,relation) VALUES(00002,"Rojin","Chang","Uncle");
 INSERT INTO hospital.PatientDependent(PatientID,fname,lname,relation) VALUES(00011,"Emmett","Ray","Brother");
 INSERT INTO hospital.PatientDependent(PatientID,fname,lname,relation) VALUES(00017,"Simeon","Livingston","Cousin");
+
+INSERT INTO hospital.Makes(MedicineID,DoctorID,AppointmentID,PatientID,Bill) VALUES(1,00005,1,00001,40);
+INSERT INTO hospital.Makes(MedicineID,DoctorID,AppointmentID,PatientID,Bill) VALUES(2,00006,2,00009,100);
+INSERT INTO hospital.Makes(MedicineID,DoctorID,AppointmentID,PatientID,Bill) VALUES(2,00009,3,00010,60);
+INSERT INTO hospital.Makes(MedicineID,DoctorID,AppointmentID,PatientID,Bill) VALUES(3,00005,4,00008,70);
+INSERT INTO hospital.Makes(MedicineID,DoctorID,AppointmentID,PatientID,Bill) VALUES(4,00008,5,00007,300);
+INSERT INTO hospital.Makes(MedicineID,DoctorID,AppointmentID,PatientID,Bill) VALUES(5,00009,6,00011,0);
+INSERT INTO hospital.Makes(MedicineID,DoctorID,AppointmentID,PatientID,Bill) VALUES(2,00005,7,00001,40);
+INSERT INTO hospital.Makes(MedicineID,DoctorID,AppointmentID,PatientID,Bill) VALUES(5,00005,8,00005,1);
+INSERT INTO hospital.Makes(MedicineID,DoctorID,AppointmentID,PatientID,Bill) VALUES(2,00008,9,00004,15);
+INSERT INTO hospital.Makes(MedicineID,DoctorID,AppointmentID,PatientID,Bill) VALUES(3,00006,10,00002,40);
+INSERT INTO hospital.Makes(MedicineID,DoctorID,AppointmentID,PatientID,Bill) VALUES(4,00005,11,00011,66);
+INSERT INTO hospital.Makes(MedicineID,DoctorID,AppointmentID,PatientID,Bill) VALUES(5,00008,12,00005,40);
+INSERT INTO hospital.Makes(MedicineID,DoctorID,AppointmentID,PatientID,Bill) VALUES(2,00006,13,00004,52);
+INSERT INTO hospital.Makes(MedicineID,DoctorID,AppointmentID,PatientID,Bill) VALUES(4,00008,14,00003,33);
+INSERT INTO hospital.Makes(MedicineID,DoctorID,AppointmentID,PatientID,Bill) VALUES(3,00009,15,00002,0);
