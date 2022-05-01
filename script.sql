@@ -372,8 +372,17 @@ CREATE VIEW hospital.get_medecine AS
 CREATE VIEW hospital.get_departement_count AS
 	SELECT  dp.departmentName, sum(if(s.departmentID= dp.departmentID, 1, 0)) AS "number of staff" FROM hospital.staff s, hospital.department dp GROUP BY dp.departmentName;
 
-CREATE VIEW hospital.get_patients AS
+CREATE VIEW hospital.get_departement_doctor_count AS
+	SELECT  dp.departmentName, sum(if(s.departmentID= dp.departmentID, 1, 0)) AS "number of doctors" FROM hospital.staff s, hospital.department dp,hospital.doctor d WHERE s.staffID=d.DoctorID GROUP BY dp.departmentName;
+
+
+
+CREATE VIEW hospital.get_patient AS
 	SELECT * FROM hospital.patient ;
+
+CREATE VIEW hospital.get_patient_Dependent AS
+	SELECT * FROM hospital.Insurance;
+
 
 CREATE VIEW hospital.get_nurse AS
 	SELECT n.nurseID,d.departmentName,s.fname,s.lname,s.email,s.phoneNumber,sc.StartingTime,sc.FinishTime FROM hospital.nurse n,hospital.staff s, hospital.department d,hospital.schedule sc,hospital.medicalstaff md WHERE n.nurseID=s.staffID AND n.nurseID=md.medStaffID AND s.departmentID=d.departmentID AND sc.ScheduleID=md.scheduleID;
@@ -381,10 +390,31 @@ CREATE VIEW hospital.get_nurse AS
 CREATE VIEW hospital.get_doctor AS
 	SELECT d.doctorID,dp.departmentName,s.fname,s.lname,s.email,s.phoneNumber,sc.StartingTime,sc.FinishTime,d.specialization FROM hospital.doctor d,hospital.staff s, hospital.department dp,hospital.schedule sc,hospital.medicalstaff md WHERE d.DoctorID=s.staffID AND d.DoctorID=md.medStaffID AND s.departmentID=dp.departmentID AND sc.ScheduleID=md.scheduleID;
 
-CREATE VIEW hospital.get_medicine AS
-	SELECT * FROM hospital.medicine;
+CREATE VIEW hospital.get_secretary AS
+	SELECT  se.SecretaryID, dp.departmentName, s.fname, s.lname, s.email, s.phoneNumber FROM hospital.secretary se, hospital.staff s,hospital.department dp WHERE s.staffID=se.SecretaryID AND dp.departmentID=s.departmentID;
+    
+CREATE VIEW hospital.get_manager AS
+	SELECT	m.ManagerID, dp.departmentName, s.fname, s.lname, s.email, s.phoneNumber FROM hospital.Manager m, hospital.staff s,hospital.department dp WHERE s.staffID=m.ManagerID AND dp.departmentID=s.departmentID;
+CREATE VIEW hospital.get_Schedule AS
+	SELECT * FROM hospital.Schedule;
+
+CREATE VIEW hospital.get_appointment AS
+	SELECT s.fname,s.lname ,r.RoomNumber,a.StartingTime,a.FinishTime FROM hospital.appointment a,hospital.staff s,hospital.room r WHERE a.SecretaryID=s.StaffID AND r.RoomID=a.RoomID  ORDER BY a.StartingTime;
+
+CREATE VIEW hospital.get_Insurance AS
+	SELECT * FROM hospital.Insurance;
+    
+CREATE VIEW hospital.get_workswith AS
+	SELECT s1.staffID AS "Nurse ID",s1.fname AS "Nurse First Name",s1.lname AS "Nurse Last Name",s2.staffID AS "Doctor ID",s2.fname  AS"Doctor First Name",s2.lname AS "Doctor Last Name" FROM hospital.workswith w, hospital.staff s1 , hospital.staff s2 WHERE s1.staffID=w.NurseID AND s2.staffID=w.DoctorID;
+
+CREATE VIEW hospital.get_department AS
+	SELECT * FROM hospital.department;
 
 DELIMITER //
+
+/*Create*/
+
+
 CREATE PROCEDURE hospital.Insert_Department(IN departmentName VARCHAR(200))
 BEGIN
 	INSERT INTO hospital.Department(departmentName) VALUES(departmentName);
@@ -455,7 +485,7 @@ BEGIN
 	INSERT INTO hospital.Medicine(name,inventory,Description) VALUES(name,inventory,Description);
 END //
 
-CREATE PROCEDURE hospital.Insert_WorkWith(IN NurseID INT,DoctorID INT)
+CREATE PROCEDURE hospital.Insert_WorksWith(IN NurseID INT,DoctorID INT)
 BEGIN
 	INSERT INTO hospital.WorksWith(NurseID,DoctorID) VALUES(NurseID,DoctorID);
 END //
@@ -466,6 +496,89 @@ BEGIN
 END //
 
 
+
+/*Delete*/
+
+
+CREATE PROCEDURE hospital.Delete_Department(IN departmentName VARCHAR(200))
+BEGIN
+	DELETE FROM hospital.Department d WHERE d.departmentName=departmentName;
+END //
+
+CREATE PROCEDURE hospital.Delete_Staff(staffID INT)
+BEGIN
+	DELETE FROM hospital.Staff s WHERE s.staffID=staffID;
+END //
+
+CREATE PROCEDURE hospital.Delete_Manager(IN managerID INT)
+BEGIN
+	DELETE FROM hospital.Manager m WHERE m.managerID=managerID;
+END //
+
+CREATE PROCEDURE hospital.Delete_Secretary(IN SecretaryID INT)
+BEGIN
+	DELETE FROM hospital.Secretary s WHERE s.SecretaryID=SecretaryID;
+END //
+
+CREATE PROCEDURE hospital.Delete_MedicalStaff(IN MedStaffID INT)
+BEGIN
+	DELETE FROM hospital.MedicalStaff md WHERE md.MedStaffID=MedStaffIDs;
+END //
+
+CREATE PROCEDURE hospital.Delete_Doctor(IN DoctorID INT)
+BEGIN
+	DELETE FROM hospital.Doctor d WHERE d.DoctorID=DoctorID;
+END //
+
+CREATE PROCEDURE hospital.Delete_Nurse(IN NurseID INT)
+BEGIN
+	DELETE FROM hospital.Nurse s WHERE n.NurseID=NurseID;
+END //
+
+CREATE PROCEDURE hospital.Delete_Room(IN RoomNumber CHAR(3))
+BEGIN
+	DELETE FROM hospital.Room r WHERE r.RoomNumber=RoomNumber;
+END //
+
+CREATE PROCEDURE hospital.Delete_Patient(IN PatientID INT)
+BEGIN
+	DELETE FROM hospital.Patient p WHERE p.PatientID=PatientID;
+END //
+
+CREATE PROCEDURE hospital.Delete_PatientDependent(IN DependentID INT)
+BEGIN
+	DELETE FROM hospital.PatientDependent p WHERE p.DependentID=DependentID;
+END //
+
+CREATE PROCEDURE hospital.Delete_Insurance(IN InsuranceNumber INT)
+BEGIN
+	DELETE FROM hospital.Insurance i WHERE i.InsuranceNumber=InsuranceNumber;
+END //
+
+CREATE PROCEDURE hospital.Delete_Schedule(IN ScheduleID INT)
+BEGIN
+	DELETE FROM hospital.Schedule sc WHERE sc.ScheduleID=ScheduleID;
+END //
+
+CREATE PROCEDURE hospital.Delete_Appointment(IN AppointmentID INT)
+BEGIN
+	DELETE FROM hospital.Appointment a WHERE a.AppointmentID=AppointmentID;
+END //
+
+CREATE PROCEDURE hospital.Delete_Medicine(IN MedicineID INT)
+BEGIN
+	DELETE FROM hospital.Medicine m WHERE m.MedicineID=MedicineID;
+END //
+
+CREATE PROCEDURE hospital.Delete_WorkSWith(IN NurseID INT,DoctorID INT)
+BEGIN
+	DELETE FROM hospital.WorSkWith w WHERE w.DoctorID=DoctorID AND w.NurseID=NurseID;
+END //
+
+CREATE PROCEDURE hospital.Delete_Makes(IN DoctorID INT,AppointmentID INT,PatientID INT)
+BEGIN
+	DELETE FROM hospital.Makes m WHERE m.DoctorID=DoctorID AND m.AppointmentID=AppointmentID AND m.PatientID=PatientID;
+END //
 
 /*Custom procedure*/
 CREATE PROCEDURE hospital.get_doctors_by_department(IN department INT)
