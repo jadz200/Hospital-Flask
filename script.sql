@@ -1,3 +1,4 @@
+DROP SCHEMA Hospital;
 CREATE schema Hospital;
 
 CREATE TABLE Hospital.Department (
@@ -20,6 +21,7 @@ CREATE TABLE Hospital.Staff(
     departmentID INT NOT NULL, 
     fname VARCHAR(200) NOT NULL, 
     lname VARCHAR(200) NOT NULL, 
+	INDEX  (lname,fname ASC) VISIBLE,
     email VARCHAR(30) NOT NULL, 
     phoneNumber VARCHAR(30) NOT NULL,
     PRIMARY KEY(staffID), 
@@ -113,7 +115,9 @@ CREATE TABLE Hospital.Patient(
     lname VARCHAR(200) NOT NULL, 
     email VARCHAR(200) NOT NULL, 
     phoneNumber VARCHAR(200) NOT NULL,
-    PRIMARY KEY(PatientID)
+    PRIMARY KEY(PatientID),
+	INDEX  (lname,fname ASC) VISIBLE
+
 );
 
 CREATE TABLE Hospital.Insurance(
@@ -133,6 +137,7 @@ CREATE TABLE Hospital.PatientDependent(
     fname VARCHAR(200)  NOT NULL, 
     lname VARCHAR(200)  NOT NULL, 
     relation ENUM('Brother','Sister','Mother','Father','Grandmother','Grandfather','Uncle','Aunt','Cousin','Wife') NOT NULL,
+	INDEX  (lname,fname ASC) VISIBLE,
     PRIMARY KEY(DependentID, PatientID),
     FOREIGN KEY(PatientID) REFERENCES Hospital.Patient(PatientID)
     ON DELETE CASCADE
@@ -203,13 +208,13 @@ INSERT INTO hospital.Secretary(SecretaryID) VALUES(00015);
 INSERT INTO hospital.Secretary(SecretaryID) VALUES(00016);
 INSERT INTO hospital.Secretary(SecretaryID) VALUES(00017);
 
-INSERT INTO hospital.schedule(StartingTime,FinishTime) VALUES("2022-05-03 07:00:00","2015-05-03 17:00:00");
-INSERT INTO hospital.schedule(StartingTime,FinishTime) VALUES("2022-05-03 09:00:00","2015-05-03 15:00:00");
-INSERT INTO hospital.schedule(StartingTime,FinishTime) VALUES("2022-05-03 05:45:00","2015-05-03 12:00:00");
-INSERT INTO hospital.schedule(StartingTime,FinishTime) VALUES("2022-05-03 06:15:00","2015-05-03 13:00:00");
-INSERT INTO hospital.schedule(StartingTime,FinishTime) VALUES("2022-05-03 08:30:00","2015-05-03 15:00:00");
-INSERT INTO hospital.schedule(StartingTime,FinishTime) VALUES("2022-06-03 07:00:00","2015-06-03 14:40:00");
-INSERT INTO hospital.schedule(StartingTime,FinishTime) VALUES("2022-07-03 10:00:00","2015-07-03 18:00:00");
+INSERT INTO hospital.schedule(StartingTime,FinishTime) VALUES("2022-05-03 07:00:00","2022-05-03 17:00:00");
+INSERT INTO hospital.schedule(StartingTime,FinishTime) VALUES("2022-05-03 09:00:00","2022-05-03 15:00:00");
+INSERT INTO hospital.schedule(StartingTime,FinishTime) VALUES("2022-05-03 05:45:00","2022-05-03 12:00:00");
+INSERT INTO hospital.schedule(StartingTime,FinishTime) VALUES("2022-05-03 06:15:00","2022-05-03 13:00:00");
+INSERT INTO hospital.schedule(StartingTime,FinishTime) VALUES("2022-05-03 08:30:00","2022-05-03 15:00:00");
+INSERT INTO hospital.schedule(StartingTime,FinishTime) VALUES("2022-06-03 07:00:00","2022-06-03 14:40:00");
+INSERT INTO hospital.schedule(StartingTime,FinishTime) VALUES("2022-07-03 10:00:00","2022-07-03 18:00:00");
 
 INSERT INTO hospital.Appointment(SecretaryID,ScheduleID,RoomID,StartingTime,FinishTime) VALUES(00018,1,1,"2022-05-03 07:00:00","2015-05-03 07:30:00");
 INSERT INTO hospital.Appointment(SecretaryID,ScheduleID,RoomID,StartingTime,FinishTime) VALUES(00018,1,4,"2022-05-03 10:00:00","2015-05-03 11:30:00");
@@ -357,3 +362,115 @@ INSERT INTO hospital.Makes(MedicineID,DoctorID,AppointmentID,PatientID,Bill) VAL
 INSERT INTO hospital.Makes(MedicineID,DoctorID,AppointmentID,PatientID,Bill) VALUES(2,00006,13,00004,52);
 INSERT INTO hospital.Makes(MedicineID,DoctorID,AppointmentID,PatientID,Bill) VALUES(4,00008,14,00003,33);
 INSERT INTO hospital.Makes(MedicineID,DoctorID,AppointmentID,PatientID,Bill) VALUES(3,00009,15,00002,0);
+
+
+#Views
+
+CREATE VIEW hospital.get_medecine AS	
+	SELECT * FROM hospital.medicine  ORDER BY inventory;
+
+CREATE VIEW hospital.get_departement_count AS
+	SELECT  dp.departmentName, sum(if(s.departmentID= dp.departmentID, 1, 0)) AS "number of staff" FROM hospital.staff s, hospital.department dp GROUP BY dp.departmentName;
+
+CREATE VIEW hospital.get_patients AS
+	SELECT * FROM hospital.patient ;
+
+CREATE VIEW hospital.get_nurse AS
+	SELECT n.nurseID,d.departmentName,s.fname,s.lname,s.email,s.phoneNumber,sc.StartingTime,sc.FinishTime FROM hospital.nurse n,hospital.staff s, hospital.department d,hospital.schedule sc,hospital.medicalstaff md WHERE n.nurseID=s.staffID AND n.nurseID=md.medStaffID AND s.departmentID=d.departmentID AND sc.ScheduleID=md.scheduleID;
+
+CREATE VIEW hospital.get_doctor AS
+	SELECT d.doctorID,dp.departmentName,s.fname,s.lname,s.email,s.phoneNumber,sc.StartingTime,sc.FinishTime,d.specialization FROM hospital.doctor d,hospital.staff s, hospital.department dp,hospital.schedule sc,hospital.medicalstaff md WHERE d.DoctorID=s.staffID AND d.DoctorID=md.medStaffID AND s.departmentID=dp.departmentID AND sc.ScheduleID=md.scheduleID;
+
+CREATE VIEW hospital.get_medicine AS
+	SELECT * FROM hospital.medicine;
+
+DELIMITER //
+CREATE PROCEDURE hospital.Insert_Department(IN departmentName VARCHAR(200))
+BEGIN
+	INSERT INTO hospital.Department(departmentName) VALUES(departmentName);
+END //
+
+CREATE PROCEDURE hospital.Insert_Staff(IN departmentID INT,fname VARCHAR(200),lname VARCHAR(200),email VARCHAR(200),phoneNumber VARCHAR(200))
+BEGIN
+	INSERT INTO hospital.Staff(departmentID,fname,lname,email,phoneNumber) VALUES(departmentID,fname,lname,email,phoneNumber);
+END //
+
+CREATE PROCEDURE hospital.Insert_Manager(IN managerID INT,departmentID INT )
+BEGIN
+	INSERT INTO hospital.Manager(managerID,departmentID) VALUES(managerID,departmentID);
+END //
+
+CREATE PROCEDURE hospital.Insert_Secretary(IN SecretaryID INT)
+BEGIN
+	INSERT INTO hospital.Secretary(SecretaryID) VALUES(SecretaryID);
+END //
+
+CREATE PROCEDURE hospital.Insert_MedicalStaff(IN MedStaffID INT,scheduleID INT)
+BEGIN
+	INSERT INTO hospital.medicalStaff(MedStaffID,scheduleID) VALUES(MedStaffID,scheduleID);
+END //
+
+CREATE PROCEDURE hospital.Insert_Doctor(IN DoctorID INT,specialization VARCHAR(200))
+BEGIN
+	INSERT INTO hospital.Doctor(DoctorID,specialization) VALUES(DoctorID,specialization);
+END //
+
+CREATE PROCEDURE hospital.Insert_Nurse(IN NurseID INT)
+BEGIN
+	INSERT INTO hospital.Nurse(NurseID) VALUES(NurseID);
+END //
+
+CREATE PROCEDURE hospital.Insert_Room(IN RoomNumber CHAR(3),Equipement VARCHAR(200))
+BEGIN
+	INSERT INTO hospital.Room(RoomNumber,Equipement) VALUES(RoomNumber,Equipement);
+END //
+
+CREATE PROCEDURE hospital.Insert_Patient(IN fname VARCHAR(200),lname VARCHAR(200),email VARCHAR(200),phoneNumber VARCHAR(200))
+BEGIN
+	INSERT INTO hospital.Patient(fname,lname,email,phoneNumber) VALUES(fname,lname,email,phoneNumber);
+END //
+
+CREATE PROCEDURE hospital.Insert_PatientDependent(IN PatientID INT,fname VARCHAR(200),lname VARCHAR(200),relation ENUM('Brother','Sister','Mother','Father','Grandmother','Grandfather','Uncle','Aunt','Cousin','Wife'))
+BEGIN
+	INSERT INTO hospital.PatientDependent(PatientID,fname,lname,relation) VALUES(PatientID,fname,lname,relation);
+END //
+
+CREATE PROCEDURE hospital.Insert_Insurance(IN PatientID INT,class ENUM('Bronze','Silver','Gold','Platinum'),company VARCHAR(200))
+BEGIN
+	INSERT INTO hospital.Insurance(PatientID,class,company) VALUES(PatientID,class,company);
+END //
+
+CREATE PROCEDURE hospital.Insert_Schedule(IN StartingTime DATETIME,FinishTime DATETIME)
+BEGIN
+	INSERT INTO hospital.Schedule(StartingTime,FinishTime) VALUES(StartingTime,FinishTime);
+END //
+
+CREATE PROCEDURE hospital.Insert_Appointment(IN SecretaryID INT,ScheduleID INT,RoomID INT,StartingTime DATETIME,FinishTime DATETIME)
+BEGIN
+	INSERT INTO hospital.Appointment(SecretaryID,ScheduleID,RoomID,StartingTime,FinishTime) VALUES(SecretaryID,ScheduleID,RoomID,StartingTime,FinishTime);
+END //
+
+CREATE PROCEDURE hospital.Insert_Medicine(IN name VARCHAR(200),inventory INT,Description VARCHAR(2000))
+BEGIN
+	INSERT INTO hospital.Medicine(name,inventory,Description) VALUES(name,inventory,Description);
+END //
+
+CREATE PROCEDURE hospital.Insert_WorkWith(IN NurseID INT,DoctorID INT)
+BEGIN
+	INSERT INTO hospital.WorksWith(NurseID,DoctorID) VALUES(NurseID,DoctorID);
+END //
+
+CREATE PROCEDURE hospital.Insert_Makes(IN MedicineID INT,DoctorID INT,AppointmentID INT,PatientID INT, Bill INT)
+BEGIN
+	INSERT INTO hospital.Makes(MedicineID,DoctorID,AppointmentID,PatientID,Bill) VALUES(MedicineID,DoctorID,AppointmentID,PatientID,Bill);
+END //
+
+
+
+/*Custom procedure*/
+CREATE PROCEDURE hospital.get_doctors_by_department(IN department INT)
+BEGIN
+	SELECT s.staffID,s.fname,s.lname,d.specialization,sc.StartingTime,sc.FinishTime FROM  hospital.doctor d,hospital.medicalstaff md, hospital.staff s, hospital.schedule sc WHERE d.DoctorID=md.MedStaffID AND d.DoctorID=s.staffID AND md.scheduleID=sc.ScheduleID AND s.departmentID=department ORDER BY s.lname;
+END //
+
+DELIMITER ;
