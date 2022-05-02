@@ -69,7 +69,9 @@ CREATE TABLE Hospital.WorksWith(
 	NurseID INT(5)  NOT NULL, 
     DoctorID INT(5)  NOT NULL,
     PRIMARY KEY(NurseID, DoctorID),
-    FOREIGN KEY(NurseID) REFERENCES Hospital.Nurse(NurseID),
+    FOREIGN KEY(NurseID) REFERENCES Hospital.Nurse(NurseID)
+	ON DELETE CASCADE
+    ON UPDATE CASCADE,
     FOREIGN KEY(DoctorID) REFERENCES Hospital.Doctor(DoctorID)
     ON DELETE CASCADE
     ON UPDATE CASCADE
@@ -106,9 +108,15 @@ CREATE TABLE Hospital.Appointment(
     StartingTime DATETIME NOT NULL, 
     FinishTime DATETIME NOT NULL,
     PRIMARY KEY(AppointmentID),
-    FOREIGN KEY(SecretaryID) REFERENCES Hospital.Secretary(SecretaryID),
-    FOREIGN KEY(ScheduleID) REFERENCES Hospital.schedules(ScheduleID),
+    FOREIGN KEY(SecretaryID) REFERENCES Hospital.Secretary(SecretaryID)
+	ON DELETE CASCADE
+    ON UPDATE CASCADE,
+    FOREIGN KEY(ScheduleID) REFERENCES Hospital.schedules(ScheduleID)
+	ON DELETE CASCADE
+    ON UPDATE CASCADE,
     FOREIGN KEY(RoomID) REFERENCES Hospital.Room(RoomID)
+	ON DELETE CASCADE
+    ON UPDATE CASCADE
 );
 
 CREATE TABLE Hospital.Patient(
@@ -138,7 +146,7 @@ CREATE TABLE Hospital.PatientDependent(
     PatientID INT(5)  NOT NULL,
     fname VARCHAR(200)  NOT NULL, 
     lname VARCHAR(200)  NOT NULL, 
-    relation ENUM('Brother','Sister','Mother','Father','Grandmother','Grandfather','Uncle','Aunt','Cousin','Wife') NOT NULL,
+    relation ENUM('Brother','Sister','Mother','Father','Grandmother','Grandfather','Uncle','Aunt','Cousin','Wife','Husband') NOT NULL,
 	INDEX  (lname,fname ASC) VISIBLE,
     PRIMARY KEY(DependentID, PatientID),
     FOREIGN KEY(PatientID) REFERENCES Hospital.Patient(PatientID)
@@ -153,9 +161,15 @@ CREATE TABLE Hospital.Makes(
     PatientID INT(5)  NOT NULL, 
     Bill INT NULL,
     PRIMARY KEY(MedicineID, DoctorID, AppointmentID, PatientID),
-    FOREIGN KEY(MedicineID) REFERENCES Hospital.Medicine(MedicineID),
-    FOREIGN KEY(DoctorID) REFERENCES Hospital.Doctor(DoctorID),
-    FOREIGN KEY(AppointmentID) REFERENCES Hospital.Appointment(AppointmentID),
+    FOREIGN KEY(MedicineID) REFERENCES Hospital.Medicine(MedicineID)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+    FOREIGN KEY(DoctorID) REFERENCES Hospital.Doctor(DoctorID)
+	ON DELETE CASCADE
+    ON UPDATE CASCADE,
+    FOREIGN KEY(AppointmentID) REFERENCES Hospital.Appointment(AppointmentID)
+	ON DELETE CASCADE
+    ON UPDATE CASCADE,
     FOREIGN KEY(PatientID) REFERENCES Hospital.Patient(PatientID)
     ON DELETE CASCADE
     ON UPDATE CASCADE
@@ -384,7 +398,7 @@ CREATE VIEW hospital.get_patient AS
 
 
 CREATE VIEW hospital.get_patient_Dependent AS
-	SELECT * FROM hospital.Insurance;
+	SELECT * FROM hospital.patientdependent;
 
 CREATE VIEW hospital.get_staff AS
 	SELECT s.staffID,d.departmentName,s.fname,s.lname,s.email,s.phoneNumber FROM hospital.staff s, hospital.department d WHERE s.departmentID=d.departmentID;
@@ -410,10 +424,10 @@ CREATE VIEW hospital.get_Schedule AS
 	SELECT * FROM hospital.schedules;
 
 CREATE VIEW hospital.get_appointment AS
-	SELECT s.fname,s.lname ,r.RoomNumber,a.StartingTime,a.FinishTime FROM hospital.appointment a,hospital.staff s,hospital.room r WHERE a.SecretaryID=s.StaffID AND r.RoomID=a.RoomID  ORDER BY a.StartingTime;
+	SELECT a.appointmentID,s.fname,s.lname ,r.RoomNumber,a.StartingTime,a.FinishTime FROM hospital.appointment a,hospital.staff s,hospital.room r WHERE a.SecretaryID=s.StaffID AND r.RoomID=a.RoomID  ORDER BY a.StartingTime;
 
 CREATE VIEW hospital.get_Insurance AS
-	SELECT * FROM hospital.Insurance;
+	SELECT i.InsuranceNumber,p.fname,p.lname,i.class,i.company FROM hospital.Insurance i, hospital.patient p WHERE p.patientID=i.patientID;
 
 CREATE VIEW hospital.get_Room AS
 	SELECT * FROM hospital.room;
@@ -474,14 +488,14 @@ BEGIN
 	INSERT INTO hospital.Patient(fname,lname,email,phoneNumber) VALUES(fname,lname,email,phoneNumber);
 END //
 
-CREATE PROCEDURE hospital.Insert_PatientDependent(IN PatientID INT,fname VARCHAR(200),lname VARCHAR(200),relation ENUM('Brother','Sister','Mother','Father','Grandmother','Grandfather','Uncle','Aunt','Cousin','Wife'))
+CREATE PROCEDURE hospital.Insert_PatientDependent(IN PatientID INT,fname VARCHAR(200),lname VARCHAR(200),relation ENUM('Brother','Sister','Mother','Father','Grandmother','Grandfather','Uncle','Aunt','Cousin','Wife','Husband'))
 BEGIN
 	INSERT INTO hospital.PatientDependent(PatientID,fname,lname,relation) VALUES(PatientID,fname,lname,relation);
 END //
 
-CREATE PROCEDURE hospital.Insert_Insurance(IN PatientID INT,class ENUM('Bronze','Silver','Gold','Platinum'),company VARCHAR(200))
+CREATE PROCEDURE hospital.Insert_Insurance(IN InsuranceNumber CHAR(10),PatientID INT,class ENUM('Bronze','Silver','Gold','Platinum'),company VARCHAR(200))
 BEGIN
-	INSERT INTO hospital.Insurance(PatientID,class,company) VALUES(PatientID,class,company);
+	INSERT INTO hospital.Insurance(InsuranceNumber,PatientID,class,company) VALUES(InsuranceNumber,PatientID,class,company);
 END //
 
 CREATE PROCEDURE hospital.Insert_Schedule(IN StartingTime DATETIME,FinishTime DATETIME)
@@ -546,7 +560,7 @@ BEGIN
 	UPDATE hospital.Patient p SET p.fname=fname,p.lname=lname,p.email=email,p.phoneNumber=phoneNumber WHERE p.PatientID=PatientID;
 END //
 
-CREATE PROCEDURE hospital.Update_PatientDependent(IN DependentID INT,PatientID INT,fname VARCHAR(200),lname VARCHAR(200),relation ENUM('Brother','Sister','Mother','Father','Grandmother','Grandfather','Uncle','Aunt','Cousin','Wife'))
+CREATE PROCEDURE hospital.Update_PatientDependent(IN DependentID INT,PatientID INT,fname VARCHAR(200),lname VARCHAR(200),relation ENUM('Brother','Sister','Mother','Father','Grandmother','Grandfather','Uncle','Aunt','Cousin','Wife','Husband'))
 BEGIN
 	UPDATE hospital.PatientDependent pd SET  pd.PatientID=PatientID,pd.fname=fname,pd.lname=lname,pd.relation=relation WHERE pd.DependentID=DependentID;
 END //
@@ -610,9 +624,9 @@ BEGIN
 	DELETE FROM hospital.Nurse s WHERE n.NurseID=NurseID;
 END //
 
-CREATE PROCEDURE hospital.Delete_Room(IN RoomNumber CHAR(3))
+CREATE PROCEDURE hospital.Delete_Room(IN RoomID INT)
 BEGIN
-	DELETE FROM hospital.Room r WHERE r.RoomNumber=RoomNumber;
+	DELETE FROM hospital.Room r WHERE r.RoomID=RoomID;
 END //
 
 CREATE PROCEDURE hospital.Delete_Patient(IN PatientID INT)

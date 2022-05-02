@@ -1,0 +1,36 @@
+<html>
+  {% extends "navbar.html" %}
+  {%block content%}
+
+  <body>
+    <form action='' method = "POST">
+      <div class="form-group">
+        <label for="patientIDLabel">Appointment ID</label>
+        <input type="appointmentID" class="form-control"  id="appointmentID" name="appointmentID"   placeholder="Enter Appointment ID">
+      </div>
+      <div class="form-group">
+        <label for="exampleInputEmail1">Secretary ID</label>
+        <input type="secretaryID" class="form-control"  id="secretaryID" name="secretaryID"   placeholder="Enter Secretary ID">
+      </div>
+      <div class="form-group">
+        <label for="exampleInputEmail1">Schedule ID</label>
+        <input type="scheduleID" class="form-control"  id="scheduleID" name="scheduleID"   placeholder="Enter Schedule ID">
+      </div>
+      <div class="form-group">
+        <label for="exampleInputEmail1">Room ID</label>
+        <input type="roomID" class="form-control"  id="roomID" name="roomID"   placeholder="Enter Room ID">
+      </div>
+      <div class="form-group">
+        <label for="exampleInputEmail1">Starting Time</label>
+        <input type="StartingTime" class="form-control"  id="StartingTime" name="StartingTime"   placeholder="Enter Starting Time">
+      </div>
+      <div class="form-group">
+        <label for="exampleInputEmail1"> Finish Time</label>
+        <input type="FinishTime" class="form-control"  id="FinishTime" name="FinishTime"   placeholder="Finish Time">
+      </div>
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+  </body>
+  {%endblock%}
+
+</html>

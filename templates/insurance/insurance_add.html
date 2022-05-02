@@ -1,0 +1,33 @@
+<html>
+  {% extends "navbar.html" %}
+  {%block content%}
+
+  <body>
+    <form action='' method = "POST">
+      <div class="form-group">
+        <label for="patientIDLabel">Insurance Number</label>
+        <input type="insuranceNumber" class="form-control"  id="insuranceNumber" name="insuranceNumber"   placeholder="Enter Insurance Number">
+      </div>
+      <div class="form-group">
+        <label for="exampleInputEmail1">Patient ID</label>
+        <input type="patientID" class="form-control"  id="patientID" name="patientID"   placeholder="Enter Patient ID">
+      </div>
+      <div class="form-group">
+        <label for="class">Insurance Class</label>
+        <select id="class" name="class" class="form-control">
+          <option selected>Bronze</option>
+          <option>Silver</option>
+          <option>Gold</option>
+          <option>Platinum</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="exampleInputEmail1">Insurance Company</label>
+        <input type="company" class="form-control"  id="company" name="company"   placeholder="Enter Insurance Company">
+      </div>
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+  </body>
+  {%endblock%}
+
+</html>

@@ -1,0 +1,16 @@
+<html>
+  {% extends "navbar.html" %}
+  {%block content%}
+
+  <body>
+    <form action='' method = "POST">
+      <div class="form-group">
+        <label for="patientIDLabel">Insurance Number</label>
+        <input type="insuranceNumber" class="form-control"  id="insuranceNumber" name="insuranceNumber"   placeholder="Enter Insurance Number">
+      </div>
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+  </body>
+  {%endblock%}
+
+</html>

@@ -1,0 +1,24 @@
+<html>
+  {% extends "navbar.html" %}
+  {%block content%}
+
+  <body>
+    <form action='' method = "POST">
+      <div class="form-group">
+        <label for="exampleInputEmail1">Room ID</label>
+        <input type="roomID" class="form-control"  id="roomID" name="roomID"   placeholder="Enter Room ID">
+      </div>
+      <div class="form-group">
+        <label for="exampleInputEmail1">Room Number</label>
+        <input type="roomNumber" class="form-control"  id="roomNumber" name="roomNumber"   placeholder="Enter Room Number">
+      </div>
+      <div class="form-group">
+        <label for="exampleInputEmail1">Equipement</label>
+        <input type="equipement" class="form-control"  id="equipement" name="equipement"   placeholder="Enter Equipement">
+      </div>
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+  </body>
+  {%endblock%}
+
+</html>

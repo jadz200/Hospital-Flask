@@ -1,0 +1,28 @@
+<html>
+    <body>
+        {% extends "navbar.html" %}
+        {%block content%}
+
+        <table class="table">
+            <thead class="thead-light">
+              <tr>
+                <th scope="col">Schedule ID</th>
+                <th scope="col">Starting Time</th>
+                <th scope="col">Finish Time</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for schedule in schedules %}
+              <tr>
+                <th scope="row">{{schedule[0]}}</th>
+                <td>{{schedule[1]}}</td>
+                <td>{{schedule[2]}}</td>
+              </tr>
+            {% endfor %}
+
+            </tbody>
+          </table>
+          {% endblock %}
+
+    </body>
+</html>
