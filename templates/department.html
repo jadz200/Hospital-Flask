@@ -1,0 +1,25 @@
+<html>
+    <body>
+        {% extends "navbar.html" %}
+        {%block content%}
+
+        <table class="table">
+            <thead class="thead-light">
+              <tr>
+                <th scope="col">Department ID</th>
+                <th scope="col">Department Name</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for department in departments %}
+              <tr>
+                <th scope="row">{{department[0]}}</th>
+                <td>{{department[1]}}</td>
+              </tr>
+            {% endfor %}
+            </tbody>
+          </table>
+          {% endblock %}
+
+    </body>
+</html>

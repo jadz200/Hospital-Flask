@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Bootstrap Example</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+      </head>
+<body>
+    <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>                        
+            </button>
+            <a class="navbar-brand" href="#">Hospital Management System</a>
+          </div>
+          <div class="collapse navbar-collapse" id="myNavbar">
+            <ul class="nav navbar-nav">
+              <li class="active"><a href="http://127.0.0.1:5000/">Home</a></li>
+              <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="http://127.0.0.1:5000/patient">Patient <span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                  <li><a href="http://127.0.0.1:5000/patient">View</a></li>
+                  <li><a href="http://127.0.0.1:5000/patient/add">Insert</a></li>
+                  <li><a href="http://127.0.0.1:5000/patient/update">Update</a></li>
+                  <li><a href="http://127.0.0.1:5000/patient/delete">Delete</a></li>
+                </ul>
+              </li>
+              <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="http://127.0.0.1:5000/staff">Staff <span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                  <li><a href="http://127.0.0.1:5000/staff">View</a></li>
+                  <li><a href="http://127.0.0.1:5000/staff/add">Insert</a></li>
+                  <li><a href="http://127.0.0.1:5000/staff/update">Update</a></li>
+                  <li><a href="http://127.0.0.1:5000/staff/delete">Delete</a></li>
+                </ul>
+              </li>
+              <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="http://127.0.0.1:5000/manager">Manager <span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                  <li><a href="http://127.0.0.1:5000/manager">View</a></li>
+                  <li><a href="http://127.0.0.1:5000/manager/add">Insert</a></li>
+                  <li><a href="http://127.0.0.1:5000/manager/update">Update</a></li>
+                  <li><a href="http://127.0.0.1:5000/manager/delete">Delete</a></li>
+                </ul>
+              </li>
+              <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="http://127.0.0.1:5000/secretary">Secretary <span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                  <li><a href="http://127.0.0.1:5000/secretary">View</a></li>
+                  <li><a href="http://127.0.0.1:5000/secretary/add">Insert</a></li>
+                  <li><a href="http://127.0.0.1:5000/secretary/update">Update</a></li>
+                  <li><a href="http://127.0.0.1:5000/secretary/delete">Delete</a></li>
+                </ul>
+              </li>
+              <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="http://127.0.0.1:5000/medicalstaff">Medical Staff <span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                  <li><a href="http://127.0.0.1:5000/medicalstaff">View</a></li>
+                  <li><a href="http://127.0.0.1:5000/medicalstaff/add">Insert</a></li>
+                  <li><a href="http://127.0.0.1:5000/medicalstaff/update">Update</a></li>
+                  <li><a href="http://127.0.0.1:5000/medicalstaff/delete">Delete</a></li>
+                </ul>
+              </li>
+              <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="http://127.0.0.1:5000/doctor">Doctor <span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                  <li><a href="http://127.0.0.1:5000/doctor">View</a></li>
+                  <li><a href="http://127.0.0.1:5000/doctor/add">Insert</a></li>
+                  <li><a href="http://127.0.0.1:5000/doctor/update">Update</a></li>
+                  <li><a href="http://127.0.0.1:5000/doctor/delete">Delete</a></li>
+                </ul>
+              </li>
+              <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="http://127.0.0.1:5000/nurse">Nurse <span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                  <li><a href="http://127.0.0.1:5000/nurse">View</a></li>
+                  <li><a href="http://127.0.0.1:5000/nurse/add">Insert</a></li>
+                  <li><a href="http://127.0.0.1:5000/nurse/update">Update</a></li>
+                  <li><a href="http://127.0.0.1:5000/nurse/delete">Delete</a></li>
+                </ul>
+              </li>
+              <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="http://127.0.0.1:5000/medecine">Medecine <span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                  <li><a href="http://127.0.0.1:5000/medecine">View</a></li>
+                  <li><a href="http://127.0.0.1:5000/medecine/add">Insert</a></li>
+                  <li><a href="http://127.0.0.1:5000/medecine/update">Update</a></li>
+                  <li><a href="http://127.0.0.1:5000/medecine/delete">Delete</a></li>
+                </ul>
+              </li>
+              <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="http://127.0.0.1:5000/department">Department <span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                  <li><a href="http://127.0.0.1:5000/department">View</a></li>
+                  <li><a href="http://127.0.0.1:5000/department/add">Insert</a></li>
+                  <li><a href="http://127.0.0.1:5000/department/update">Update</a></li>
+                  <li><a href="http://127.0.0.1:5000/department/delete">Delete</a></li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>    {% block content %}
+    {% endblock %}
+  
+</body>
+</html>

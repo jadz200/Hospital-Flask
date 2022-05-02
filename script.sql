@@ -387,7 +387,7 @@ CREATE VIEW hospital.get_patient_Dependent AS
 	SELECT * FROM hospital.Insurance;
 
 CREATE VIEW hospital.get_staff AS
-	SELECT * FROM hospital.staff;
+	SELECT s.staffID,d.departmentName,s.fname,s.lname,s.email,s.phoneNumber FROM hospital.staff s, hospital.department d WHERE s.departmentID=d.departmentID;
 
 
 CREATE VIEW hospital.get_Medicalstaff AS
