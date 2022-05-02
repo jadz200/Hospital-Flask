@@ -1,3 +1,4 @@
+from logging import raiseExceptions
 from colorama import Cursor
 from flask import redirect, render_template, request, Flask, jsonify
 import mysql.connector  as mysql
@@ -879,9 +880,23 @@ def special3():
     if request.method == 'POST':
         doctorID=request.form.get('doctorID')
         cursor=mysqldb.cursor()
-        print(doctorID)
-        cursor.execute("call hospital.get_patients_by_doctor(\'"+doctorID+"\');")
+        cursor.execute("call hospital.get_patients_by_doctor("+doctorID+");")
         res = []
         for row in cursor:
             res.append(row)
         return render_template('special/special3_2.html',specials=res)
+
+@app.route('/doctor/department', methods=['GET','POST'])
+def special4():
+    if request.method == 'GET':
+        return render_template('special/special4_1.html')
+ 
+    if request.method == 'POST':
+        departmentID=request.form.get('departmentID')
+        cursor=mysqldb.cursor()
+        cursor.execute("call hospital.get_doctors_by_department(\'"+departmentID+"\');")
+        cursor.execute("call hospital.get_doctors_by_department(\'"+departmentID+"\');")
+        res = []
+        for row in cursor:
+            res.append(row)
+        return render_template('special/special4_2.html',specials=res)
