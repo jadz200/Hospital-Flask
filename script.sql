@@ -621,7 +621,7 @@ END //
 
 CREATE PROCEDURE hospital.Delete_Nurse(IN NurseID INT)
 BEGIN
-	DELETE FROM hospital.Nurse s WHERE n.NurseID=NurseID;
+	DELETE FROM hospital.Nurse n WHERE n.NurseID=NurseID;
 END //
 
 CREATE PROCEDURE hospital.Delete_Room(IN RoomID INT)

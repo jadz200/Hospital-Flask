@@ -605,7 +605,7 @@ def delete_patientDependents():
         mysqldb.commit()
         return redirect('/patientDependent')
     
-    #insurance Select
+#insurance Select
 @app.route('/insurance', methods=['GET','POST'])
 def get_insurances():
     cursor=mysqldb.cursor()
@@ -660,3 +660,95 @@ def delete_insurances():
         cursor.execute("call hospital.Delete_insurance(\'"+insuranceNumber+"\');")
         mysqldb.commit()
         return redirect('/insurance')
+
+#nurse Select
+@app.route('/nurse', methods=['GET','POST'])
+def get_nurses():
+    cursor=mysqldb.cursor()
+    cursor.execute("SELECT * FROM hospital.get_nurse;")
+    res = []
+    for row in cursor:
+        res.append(row)
+    return render_template('nurse/nurse.html',nurses=res)
+
+#nurse Insert
+@app.route('/nurse/add', methods=['GET','POST'])
+def add_nurses():
+    if request.method == 'GET':
+        return render_template('nurse/nurse_add.html')
+ 
+    if request.method == 'POST':
+        nurseID=request.form.get('nurseID')
+
+        cursor=mysqldb.cursor()
+        cursor.execute("call hospital.Insert_nurse(\'"+nurseID+"\');")
+        mysqldb.commit()
+        return redirect('/nurse')
+
+#No update for Nurse
+
+#nurse Delete
+@app.route('/nurse/delete', methods=['GET','POST'])
+def delete_nurses():
+    if request.method == 'GET':
+        return render_template('nurse/nurse_delete.html')
+ 
+    if request.method == 'POST':
+        nurseID=request.form.get('nurseID')
+        cursor=mysqldb.cursor()
+        cursor.execute("call hospital.Delete_nurse(\'"+nurseID+"\');")
+        mysqldb.commit()
+        return redirect('/nurse')
+    
+#doctor Select
+@app.route('/doctor', methods=['GET','POST'])
+def get_doctors():
+    cursor=mysqldb.cursor()
+    cursor.execute("SELECT * FROM hospital.get_doctor;")
+    res = []
+    for row in cursor:
+        res.append(row)
+    return render_template('doctor/doctor.html',doctors=res)
+
+#doctor Insert
+@app.route('/doctor/add', methods=['GET','POST'])
+def add_doctors():
+    if request.method == 'GET':
+        return render_template('doctor/doctor_add.html')
+ 
+    if request.method == 'POST':
+        doctorID=request.form.get('doctorID')
+
+        cursor=mysqldb.cursor()
+        cursor.execute("call hospital.Insert_doctor(\'"+doctorID+"\');")
+        mysqldb.commit()
+        return redirect('/doctor')
+
+#doctor Update
+@app.route('/doctor/update', methods=['GET','POST'])
+def update_doctors():
+    if request.method == 'GET':
+        return render_template('doctor/doctor_update.html')
+ 
+    if request.method == 'POST':
+        doctorNumber=request.form.get('doctorNumber')
+        patientID=request.form.get('patientID')
+        insclass=request.form.get('class')
+        company=request.form.get('company')
+        cursor=mysqldb.cursor()
+        cursor.execute("call hospital.Update_doctor(\'"+str(doctorNumber)+"\',\'"+patientID+"\',\'"+insclass+"\',\'"+company+"\');")
+        mysqldb.commit()
+        return redirect('/doctor')
+    
+#doctor Delete
+@app.route('/doctor/delete', methods=['GET','POST'])
+def delete_doctors():
+    if request.method == 'GET':
+        return render_template('doctor/doctor_delete.html')
+ 
+    if request.method == 'POST':
+        doctorID=request.form.get('doctorID')
+        cursor=mysqldb.cursor()
+        cursor.execute("call hospital.Delete_doctor(\'"+doctorID+"\');")
+        mysqldb.commit()
+        return redirect('/doctor')
