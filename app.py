@@ -718,9 +718,10 @@ def add_doctors():
  
     if request.method == 'POST':
         doctorID=request.form.get('doctorID')
+        specialization=request.form.get('specialization')
 
         cursor=mysqldb.cursor()
-        cursor.execute("call hospital.Insert_doctor(\'"+doctorID+"\');")
+        cursor.execute("call hospital.Insert_doctor(\'"+doctorID+"\',\'"+specialization+"\');")
         mysqldb.commit()
         return redirect('/doctor')
 
@@ -731,12 +732,10 @@ def update_doctors():
         return render_template('doctor/doctor_update.html')
  
     if request.method == 'POST':
-        doctorNumber=request.form.get('doctorNumber')
-        patientID=request.form.get('patientID')
-        insclass=request.form.get('class')
-        company=request.form.get('company')
+        doctorID=request.form.get('doctorID')
+        specialization=request.form.get('specialization')
         cursor=mysqldb.cursor()
-        cursor.execute("call hospital.Update_doctor(\'"+str(doctorNumber)+"\',\'"+patientID+"\',\'"+insclass+"\',\'"+company+"\');")
+        cursor.execute("call hospital.Update_Doctor(\'"+doctorID+"\',\'"+specialization+"\');")
         mysqldb.commit()
         return redirect('/doctor')
     
@@ -752,3 +751,137 @@ def delete_doctors():
         cursor.execute("call hospital.Delete_doctor(\'"+doctorID+"\');")
         mysqldb.commit()
         return redirect('/doctor')
+
+#workswith Select
+@app.route('/workswith', methods=['GET','POST'])
+def get_workswiths():
+    cursor=mysqldb.cursor()
+    cursor.execute("SELECT * FROM hospital.get_workswith;")
+    res = []
+    for row in cursor:
+        res.append(row)
+    return render_template('workswith/workswith.html',workswiths=res)
+
+#workswith Insert
+@app.route('/workswith/add', methods=['GET','POST'])
+def add_workswiths():
+    if request.method == 'GET':
+        return render_template('workswith/workswith_add.html')
+ 
+    if request.method == 'POST':
+        nurseID=request.form.get('nurseID')
+        doctorID=request.form.get('doctorID')
+        cursor=mysqldb.cursor()
+        cursor.execute("call hospital.Insert_WorksWith(\'"+nurseID+"\',\'"+doctorID+"\');")
+        mysqldb.commit()
+        return redirect('/workswith')
+
+#workswith has no update
+
+#workswith Delete
+@app.route('/workswith/delete', methods=['GET','POST'])
+def delete_workswiths():
+    if request.method == 'GET':
+        return render_template('workswith/workswith_delete.html')
+ 
+    if request.method == 'POST':
+        nurseID=request.form.get('nurseID')
+        doctorID=request.form.get('doctorID')
+        cursor=mysqldb.cursor()
+        cursor.execute("call hospital.Delete_WorksWith(\'"+nurseID+"\',\'"+doctorID+"\');")
+        mysqldb.commit()
+        return redirect('/workswith')
+    
+    #makes Select
+@app.route('/makes', methods=['GET','POST'])
+def get_makess():
+    cursor=mysqldb.cursor()
+    cursor.execute("SELECT * FROM hospital.get_makes;")
+    res = []
+    for row in cursor:
+        res.append(row)
+    return render_template('makes/makes.html',makess=res)
+
+#makes Insert
+@app.route('/makes/add', methods=['GET','POST'])
+def add_makess():
+    if request.method == 'GET':
+        return render_template('makes/makes_add.html')
+ 
+    if request.method == 'POST':
+        medicineID=request.form.get('medicineID')
+        doctorID=request.form.get('doctorID')
+        appointmentID=request.form.get('appointmentID')
+        patientID=request.form.get('patientID')
+        bill=request.form.get('bill')
+
+        cursor=mysqldb.cursor()
+        cursor.execute("call hospital.Insert_makes(\'"+medicineID+"\',\'"+doctorID+"\',\'"+appointmentID+"\',\'"+patientID+"\',\'"+bill+"\');")
+        mysqldb.commit()
+        return redirect('/makes')
+
+#makes Update
+@app.route('/makes/update', methods=['GET','POST'])
+def update_makess():
+    if request.method == 'GET':
+        return render_template('makes/makes_update.html')
+    
+    if request.method == 'POST':
+        makesID=request.form.get('makesID')
+        medicineID=request.form.get('medicineID')
+        doctorID=request.form.get('doctorID')
+        appointmentID=request.form.get('appointmentID')
+        patientID=request.form.get('patientID')
+        bill=request.form.get('bill')
+        cursor=mysqldb.cursor()
+        cursor.execute("call hospital.Update_makes(\'"+makesID+"\',\'"+medicineID+"\',\'"+doctorID+"\',\'"+appointmentID+"\',\'"+patientID+"\',\'"+bill+"\');")
+        mysqldb.commit()
+        return redirect('/makes')
+    
+#makes Delete
+@app.route('/makes/delete', methods=['GET','POST'])
+def delete_makess():
+    if request.method == 'GET':
+        return render_template('makes/makes_delete.html')
+ 
+    if request.method == 'POST':
+        makesID=request.form.get('makesID')
+        cursor=mysqldb.cursor()
+        cursor.execute("call hospital.Delete_makes(\'"+makesID+"\');")
+        mysqldb.commit()
+        return redirect('/makes')
+    
+    
+#Special QUERIES
+@app.route('/department/staff', methods=['GET','POST'])
+def special1():
+    cursor=mysqldb.cursor()
+    cursor.execute("SELECT * FROM hospital.get_departement_count;")
+    res = []
+    for row in cursor:
+        res.append(row)
+    return render_template('special/special1.html',specials=res)
+ 
+@app.route('/department/doctor', methods=['GET','POST'])
+def special2():
+    cursor=mysqldb.cursor()
+    cursor.execute("SELECT * FROM hospital.get_departement_doctor_count;")
+    res = []
+    for row in cursor:
+        res.append(row)
+    return render_template('special/special2.html',specials=res)
+ 
+@app.route('/doctor/patient', methods=['GET','POST'])
+def special3():
+    if request.method == 'GET':
+        return render_template('special/special3_1.html')
+ 
+    if request.method == 'POST':
+        doctorID=request.form.get('doctorID')
+        cursor=mysqldb.cursor()
+        print(doctorID)
+        cursor.execute("call hospital.get_patients_by_doctor(\'"+doctorID+"\');")
+        res = []
+        for row in cursor:
+            res.append(row)
+        return render_template('special/special3_2.html',specials=res)

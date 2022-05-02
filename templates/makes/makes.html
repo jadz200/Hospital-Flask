@@ -1,0 +1,46 @@
+<html>
+    <body>
+        {% extends "navbar.html" %}
+        {%block content%}
+
+        <table class="table">
+            <thead class="thead-light">
+              <tr>
+                <th scope="col">Visit ID</th>
+                <th scope="col">Medicine ID</th>
+                <th scope="col">Medicine Name</th>
+                <th scope="col">Appointment ID</th>
+                <th scope="col">Starting Time</th>
+                <th scope="col">Finish Time</th>
+                <th scope="col">Doctor ID</th>
+                <th scope="col">Patient ID</th>
+                <th scope="col">Patient First Name</th>
+                <th scope="col">Patient Last Name</th>
+                <th scope="col">Bill</th>
+
+              </tr>
+            </thead>
+            <tbody>
+              {% for makes in makess %}
+              <tr>
+                <th scope="row">{{makes[0]}}</th>
+                <td>{{makes[1]}}</td>
+                <td>{{makes[2]}}</td>
+                <td>{{makes[3]}}</td>
+                <td>{{makes[4]}}</td>
+                <td>{{makes[5]}}</td>
+                <td>{{makes[6]}}</td>
+                <td>{{makes[7]}}</td>
+                <td>{{makes[8]}}</td>
+                <td>{{makes[9]}}</td>
+                <td>{{makes[10]}}</td>
+
+              </tr>
+            {% endfor %}
+
+            </tbody>
+          </table>
+          {% endblock %}
+
+    </body>
+</html>

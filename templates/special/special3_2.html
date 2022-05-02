@@ -1,0 +1,27 @@
+<html>
+    <body>
+        {% extends "navbar.html" %}
+        {%block content%}
+
+        <table class="table">
+            <thead class="thead-light">
+              <tr>
+                <th scope="col">Department Name</th>
+                <th scope="col">Doctor Count</th>
+
+            </tr>
+            </thead>
+            <tbody>
+              {% for special in specials %}
+              <tr>
+                <th scope="row">{{special[0]}}</th>
+                <td>{{special[1]}}</td>
+              </tr>
+            {% endfor %}
+
+            </tbody>
+          </table>
+          {% endblock %}
+
+    </body>
+</html>

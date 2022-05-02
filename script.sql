@@ -155,12 +155,13 @@ CREATE TABLE Hospital.PatientDependent(
 );
 
 CREATE TABLE Hospital.Makes(
+	MakesID INT NOT NULL AUTO_INCREMENT,
 	MedicineID INT(3)  NOT NULL,
     DoctorID INT(5)  NOT NULL,
     AppointmentID INT NOT NULL,
     PatientID INT(5)  NOT NULL, 
     Bill INT NULL,
-    PRIMARY KEY(MedicineID, DoctorID, AppointmentID, PatientID),
+    PRIMARY KEY(MakesID),
     FOREIGN KEY(MedicineID) REFERENCES Hospital.Medicine(MedicineID)
     ON DELETE CASCADE
     ON UPDATE CASCADE,
@@ -438,6 +439,8 @@ CREATE VIEW hospital.get_workswith AS
 CREATE VIEW hospital.get_department AS
 	SELECT * FROM hospital.department;
 
+CREATE VIEW hospital.get_Makes AS
+	SELECT m.makesID,med.medicineID,med.medName,m.appointmentID,ap.StartingTime,ap.FinishTime,m.DoctorID,p.PatientID,p.fname,p.lname,m.bill FROM hospital.makes m,hospital.medicine med,hospital.Appointment ap,hospital.patient p WHERE med.MedicineID=m.MedicineID AND ap.AppointmentID=m.AppointmentID AND m.PatientID=p.patientID;
 DELIMITER //
 
 /*Create*/
@@ -585,6 +588,10 @@ BEGIN
 	UPDATE hospital.Medicine m SET m.medname=medname,m.inventory=inventory,m.medDescription=medDescription WHERE m.MedicineID=MedicineID;
 END //
 
+CREATE PROCEDURE hospital.Update_Makes(IN makesID INT,MedicineID INT,DoctorID INT,AppointmentID INT,PatientID INT, Bill INT)
+BEGIN
+	UPDATE hospital.Medicine m SET m.AppointmentID=AppointmentID,m.MedicineID=MedicineID,m.DoctorID=DoctorID,m.PatientID=PatientID,m.bill=Bill WHERE m.makesID=makesID;
+END //
 
 /*Delete*/
 
@@ -621,7 +628,7 @@ END //
 
 CREATE PROCEDURE hospital.Delete_Nurse(IN NurseID INT)
 BEGIN
-	DELETE FROM hospital.Nurse n WHERE n.NurseID=NurseID;
+	DELETE FROM hospital.Nurse nInsert_Doctor WHERE n.NurseID=NurseID;
 END //
 
 CREATE PROCEDURE hospital.Delete_Room(IN RoomID INT)
@@ -661,18 +668,23 @@ END //
 
 CREATE PROCEDURE hospital.Delete_WorkSWith(IN NurseID INT,DoctorID INT)
 BEGIN
-	DELETE FROM hospital.WorSkWith w WHERE w.DoctorID=DoctorID AND w.NurseID=NurseID;
+	DELETE FROM hospital.workswith w WHERE w.DoctorID=DoctorID AND w.NurseID=NurseID;
 END //
 
-CREATE PROCEDURE hospital.Delete_Makes(IN DoctorID INT,AppointmentID INT,PatientID INT)
+CREATE PROCEDURE hospital.Delete_Makes(IN makesID INT)
 BEGIN
-	DELETE FROM hospital.Makes m WHERE m.DoctorID=DoctorID AND m.AppointmentID=AppointmentID AND m.PatientID=PatientID;
+	DELETE FROM hospital.Makes m WHERE m.makesID=makesID;
 END //
 
 /*Custom procedure*/
 CREATE PROCEDURE hospital.get_doctors_by_department(IN department INT)
 BEGIN
 	SELECT s.staffID,s.fname,s.lname,d.specialization,sc.StartingTime,sc.FinishTime FROM  hospital.doctor d,hospital.medicalstaff md, hospital.staff s, hospital.schedules sc WHERE d.DoctorID=md.MedStaffID AND d.DoctorID=s.staffID AND md.scheduleID=sc.ScheduleID AND s.departmentID=department ORDER BY s.lname;
+END //
+
+CREATE PROCEDURE hospital.get_patients_by_doctor(IN doctorID INT)
+BEGIN
+	SELECT p.fname,p.lname FROM  hospital.patient p, hospital.makes m WHERE m.DoctorID=doctorID AND p.patientID=m.patientID ORDER BY p.lname;
 END //
 
 DELIMITER ;
