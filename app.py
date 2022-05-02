@@ -114,158 +114,220 @@ def update_staff():
         mysqldb.commit()
         return redirect('/staff')
 #Staff Delete
-@app.route('/staff/delete', methods=['POST'])
+@app.route('/staff/delete', methods=['GET','POST'])
 def delete_staff():
-    cursor=mysqldb.cursor()
-    json = request.json
-    cursor.execute("call hospital.Delete_Staff("+str(json['StaffID'])+");")
-    mysqldb.commit()
-    return 'success'
+    if request.method == 'GET':
+        return render_template('staff/staff_delete.html')
+ 
+    if request.method == 'POST':
+        staffID = request.form.get('staffID')
+        cursor=mysqldb.cursor()
+        cursor.execute("call hospital.Delete_Staff("+staffID+");")
+        mysqldb.commit()
+        return redirect('/staff')
 
 
 
 #Manager Select
-@app.route('/manager', methods=['POST'])
+@app.route('/manager', methods=['GET','POST'])
 def get_managers():
     cursor=mysqldb.cursor()
     cursor.execute("SELECT * FROM hospital.get_manager;")
     res = []
     for row in cursor:
         res.append(row)
-    return jsonify(res)
+    return render_template('manager/manager.html',managers=res)
 
 #Manager Insert
-@app.route('/manager/add', methods=['POST'])
+@app.route('/manager/add', methods=['GET','POST'])
 def add_managers():
-    cursor=mysqldb.cursor()
-    json = request.json
-    cursor.execute("call hospital.Insert_Manager("+str(json['ManagerID'])+","+str(json['departmentID'])+");")
-    mysqldb.commit()
-    return 'success'
+    if request.method == 'GET':
+        return render_template('manager/manager_add.html')
+ 
+    if request.method == 'POST':
+        managerID = request.form.get('managerID')
+        departmentID = request.form.get('departmentID')
+        cursor=mysqldb.cursor()
+        cursor.execute("call hospital.Insert_Manager("+managerID+","+departmentID+");")
+        mysqldb.commit()
+        return redirect('/manager')
 
 #Manager Update
-@app.route('/manager/update', methods=['POST'])
+@app.route('/manager/update', methods=['GET','POST'])
 def update_managers():
-    cursor=mysqldb.cursor()
-    json = request.json
-    cursor.execute("call hospital.Update_Manager("+str(json['ManagerID'])+","+str(json['departmentID'])+");")
-    mysqldb.commit()
-    return 'success'
+    if request.method == 'GET':
+        return render_template('manager/manager_update.html')
+ 
+    if request.method == 'POST':
+        managerID = request.form.get('managerID')
+        departmentID = request.form.get('departmentID')
+        cursor=mysqldb.cursor()
+        cursor.execute("call hospital.Update_Manager("+managerID+");")
+        mysqldb.commit()
+        return redirect('/manager')
 
 #Manager Delete
-@app.route('/manager/delete', methods=['POST'])
+@app.route('/manager/delete', methods=['GET','POST'])
 def delete_managers():
-    cursor=mysqldb.cursor()
-    json = request.json
-    cursor.execute("call hospital.Delete_Manager("+str(json['ManagerID'])+");")
-    mysqldb.commit()
-    return 'success'
+    if request.method == 'GET':
+        return render_template('manager/manager_delete.html')
+ 
+    if request.method == 'POST':
+        managerID = request.form.get('managerID')
+        cursor=mysqldb.cursor()
+        cursor.execute("call hospital.Delete_Manager("+managerID+");")
+        mysqldb.commit()
+        return redirect('/manager')
+
 
 #MedicalStaff Select
-@app.route('/medicalstaff', methods=['POST'])
+@app.route('/medicalstaff', methods=['GET','POST'])
 def get_MedicalStaffs():
     cursor=mysqldb.cursor()
     cursor.execute("SELECT * FROM hospital.get_MedicalStaff;")
     res = []
     for row in cursor:
         res.append(row)
-    return jsonify(res)
+    return render_template('medicalstaff/medicalstaff.html',medicalstaffs=res)
 
 #MedicalStaff Insert
-@app.route('/medicalstaff/add', methods=['POST'])
+@app.route('/medicalstaff/add', methods=['GET','POST'])
 def add_MedicalStaffs():
-    cursor=mysqldb.cursor()
-    json = request.json
-    cursor.execute("call hospital.Insert_MedicalStaff("+str(json['MedStaffID'])+","+str(json['scheduleID'])+");")
-    mysqldb.commit()
-    return 'success'
+    if request.method == 'GET':
+        return render_template('medicalstaff/medicalstaff_add.html')
+ 
+    if request.method == 'POST':
+        medstaffID = request.form.get('medstaffID')
+        scheduleID = request.form.get('scheduleID')
+        cursor=mysqldb.cursor()
+        cursor.execute("call hospital.Insert_MedicalStaff("+medstaffID+","+scheduleID+");")
+        mysqldb.commit()
+        return redirect('/medicalstaff')
 
 #MedicalStaff Update
-@app.route('/medicalstaff/update', methods=['POST'])
+@app.route('/medicalstaff/update', methods=['GET','POST'])
 def update_MedicalStaffs():
-    cursor=mysqldb.cursor()
-    json = request.json
-    cursor.execute("call hospital.Update_MedicalStaff("+str(json['MedStaffID'])+","+str(json['scheduleID'])+");")
-    mysqldb.commit()
-    return 'success'
+    if request.method == 'GET':
+        return render_template('medicalstaff/medicalstaff_update.html')
+ 
+    if request.method == 'POST':
+        medstaffID = request.form.get('medstaffID')
+        scheduleID = request.form.get('scheduleID')
+        cursor=mysqldb.cursor()
+        cursor.execute("call hospital.Update_MedicalStaff("+medstaffID+","+scheduleID+");")
+        mysqldb.commit()
+        return redirect('/medicalstaff')
 
 #MedicalStaff Delete
-@app.route('/medicalstaff/delete', methods=['POST'])
+@app.route('/medicalstaff/delete', methods=['GET','POST'])
 def delete_MedicalStaffs():
-    cursor=mysqldb.cursor()
-    json = request.json
-    cursor.execute("call hospital.Delete_MedicalStaff("+str(json['MedStaffID'])+");")
-    mysqldb.commit()
-    return 'success'
+    if request.method == 'GET':
+        return render_template('medicalstaff/medicalstaff_delete.html')
+ 
+    if request.method == 'POST':
+        medstaffID = request.form.get('medstaffID')
+        cursor=mysqldb.cursor()
+        cursor.execute("call hospital.Delete_MedicalStaff("+medstaffID+");")
+        mysqldb.commit()
+        return redirect('/medicalstaff')
 
 
 
 #secretary Select
-@app.route('/secretary', methods=['POST'])
+@app.route('/secretary', methods=['GET','POST'])
 def get_secretarys():
     cursor=mysqldb.cursor()
     cursor.execute("SELECT * FROM hospital.get_secretary;")
     res = []
     for row in cursor:
         res.append(row)
-    return jsonify(res)
+    return render_template('secretary/secretary.html',secretaries=res)
 
 #secretary Insert
-@app.route('/secretary/add', methods=['POST'])
+@app.route('/secretary/add', methods=['GET','POST'])
 def add_secretarys():
-    cursor=mysqldb.cursor()
-    json = request.json
-    cursor.execute("call hospital.Insert_secretary("+str(json['secretaryID'])+");")
-    mysqldb.commit()
-    return 'success'
+    if request.method == 'GET':
+        return render_template('secretary/secretary_add.html')
+ 
+    if request.method == 'POST':
+        secretaryID = request.form.get('secretaryID')
+        cursor=mysqldb.cursor()
+        cursor.execute("call hospital.Insert_secretary("+secretaryID+");")
+        mysqldb.commit()
+        return redirect('/secretary')
+
 
 #No Update for secretary
 
 #secretary Delete
-@app.route('/secretary/delete', methods=['POST'])
+@app.route('/secretary/delete', methods=['GET','POST'])
 def delete_secretarys():
-    cursor=mysqldb.cursor()
-    json = request.json
-    cursor.execute("call hospital.Delete_secretary("+str(json['secretaryID'])+");")
-    mysqldb.commit()
-    return 'success'
+    if request.method == 'GET':
+        return render_template('secretary/secretary_delete.html')
+ 
+    if request.method == 'POST':
+        secretaryID = request.form.get('secretaryID')
+        cursor=mysqldb.cursor()
+        cursor.execute("call hospital.Delete_secretary("+secretaryID+");")
+        mysqldb.commit()
+        return redirect('/secretary')
+
 
 #medicine Select
-@app.route('/medicine', methods=['POST'])
+@app.route('/medicine', methods=['GET','POST'])
 def get_medicines():
     cursor=mysqldb.cursor()
     cursor.execute("SELECT * FROM hospital.get_medecine;")
     res = []
     for row in cursor:
         res.append(row)
-    return jsonify(res)
+    return render_template('medicine/medicine.html',medicines=res)
 
 #medicine Insert
-@app.route('/medicine/add', methods=['POST'])
+@app.route('/medicine/add', methods=['GET','POST'])
 def add_medicines():
-    cursor=mysqldb.cursor()
-    json = request.json
-    cursor.execute("call hospital.Insert_Medicine("+json["medname"]+","+str(json["inventory"])+", "+json["meddescription"]+");")
-    mysqldb.commit()
-    return 'success'
+    if request.method == 'GET':
+        return render_template('medicine/medicine_add.html')
+ 
+    if request.method == 'POST':
+        medname = request.form.get('medname')
+        inventory = request.form.get('inventory')
+        meddescription = request.form.get('meddescription')
+        cursor=mysqldb.cursor()
+        cursor.execute("call hospital.Insert_Medicine("+medname+","+inventory+',test'+");")
+        mysqldb.commit()
+        return redirect('/medicine')
+
 
 #medicine Update
-@app.route('/medicine/update', methods=['POST'])
+@app.route('/medicine/update', methods=['GET','POST'])
 def update_medicines():
-    cursor=mysqldb.cursor()
-    json = request.json
-    cursor.execute("call hospital.Update_Medicine("+str(json["MedicineID"])+","+json["medname"]+","+str(json["inventory"])+", "+json["meddescription"]+");")
-    mysqldb.commit()
-    return 'success'
+    if request.method == 'GET':
+        return render_template('medicine/medicine_update.html')
+ 
+    if request.method == 'POST':
+        medicineID=request.form.get('medicineID')
+        medname = request.form.get('medname')
+        inventory = request.form.get('inventory')
+        meddescription = request.form.get('meddescription')
+        cursor=mysqldb.cursor()
+        cursor.execute("call hospital.Update_Medicine("+medicineID+","+medname+","+inventory+", "+meddescription+");")
+        mysqldb.commit()
+        return redirect('/medicine')
 
 #medicine Delete
-@app.route('/medicine/delete', methods=['POST'])
+@app.route('/medicine/delete', methods=['GET','POST'])
 def delete_medicines():
-    cursor=mysqldb.cursor()
-    json = request.json
-    cursor.execute("call hospital.Delete_medicine("+str(json['medicineID'])+");")
-    mysqldb.commit()
-    return 'success'
+    if request.method == 'GET':
+        return render_template('medicine/medicine_delete.html')
+ 
+    if request.method == 'POST':
+        medicineID=request.form.get('medicineID')
+        cursor=mysqldb.cursor()
+        cursor.execute("call hospital.Delete_medicine("+medicineID+");")
+        mysqldb.commit()
+        return redirect('/medicine')
+
 
 #department Select
 @app.route('/department', methods=['GET','POST'])
@@ -278,7 +340,7 @@ def get_departments():
     return render_template('department.html',departments=res)
 
 #department Insert
-@app.route('/department/add', methods=['POST'])
+@app.route('/department/add', methods=['GET','POST'])
 def add_departments():
     cursor=mysqldb.cursor()
     json = request.json
@@ -287,7 +349,7 @@ def add_departments():
     return 'success'
 
 #department Update
-@app.route('/department/update', methods=['POST'])
+@app.route('/department/update', methods=['GET','POST'])
 def update_departments():
     cursor=mysqldb.cursor()
     json = request.json
@@ -296,7 +358,7 @@ def update_departments():
     return 'success'
 
 #department Delete
-@app.route('/department/delete', methods=['POST'])
+@app.route('/department/delete', methods=['GET','POST'])
 def delete_departments():
     cursor=mysqldb.cursor()
     json = request.json

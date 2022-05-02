@@ -1,0 +1,30 @@
+<html>
+    <body>
+        {% extends "navbar.html" %}
+        {%block content%}
+
+        <table class="table">
+            <thead class="thead-light">
+              <tr>
+                <th scope="col">Medicine ID</th>
+\                <th scope="col">Name</th>
+                <th scope="col">Inventory</th>
+                <th scope="col">Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for medicine in medicines %}
+              <tr>
+                <th scope="row">{{medicine[0]}}</th>
+                <td>{{medicine[1]}}</td>
+                <td>{{medicine[2]}}</td>
+                <td>{{medicine[3]}}</td>
+              </tr>
+            {% endfor %}
+
+            </tbody>
+          </table>
+          {% endblock %}
+
+    </body>
+</html>

@@ -1,0 +1,28 @@
+<html>
+  {% extends "navbar.html" %}
+  {%block content%}
+
+  <body>
+    <form action='' method = "POST">
+      <div class="form-group">
+        <label for="exampleInputEmail1">Medicine ID</label>
+        <input type="medicineID" class="form-control"  id="medicineID" name="medicineID"   placeholder="Enter Medicine ID">
+      </div>
+      <div class="form-group">
+        <label for="exampleInputEmail1">Medicine Name</label>
+        <input type="medname" class="form-control"  id="medname" name="medname"   placeholder="Enter Medicine Name">
+      </div>
+      <div class="form-group">
+        <label for="exampleInputEmail1">Inventory</label>
+        <input type="inventory" class="form-control"  id="inventory" name="inventory"   placeholder="Enter Inventory">
+      </div>
+      <div class="form-group">
+        <label for="exampleInputEmail1">Medicine Description</label>
+        <input type="meddescription" class="form-control"  id="meddescription" name="meddescription"   placeholder="Enter Medicine Description">
+      </div>
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+  </body>
+  {%endblock%}
+
+</html>

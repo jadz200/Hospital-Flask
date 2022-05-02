@@ -1,0 +1,40 @@
+<html>
+    <body>
+        {% extends "navbar.html" %}
+        {%block content%}
+
+        <table class="table">
+            <thead class="thead-light">
+              <tr>
+                <th scope="col">Medical Staff ID</th>
+                <th scope="col">Department Name</th>
+                <th scope="col">First Name</th>
+                <th scope="col">Last Name</th>
+                <th scope="col">Email</th>
+                <th scope="col">Phone Number</th>
+                <th scope="col">Starting time</th>
+                <th scope="col">Finish Time</th>
+
+              </tr>
+            </thead>
+            <tbody>
+              {% for medicalstaff in medicalstaffs %}
+              <tr>
+                <th scope="row">{{medicalstaff[0]}}</th>
+                <td>{{medicalstaff[1]}}</td>
+                <td>{{medicalstaff[2]}}</td>
+                <td>{{medicalstaff[3]}}</td>
+                <td>{{medicalstaff[4]}}</td>
+                <td>{{medicalstaff[5]}}</td>
+                <td>{{medicalstaff[6]}}</td>
+                <td>{{medicalstaff[7]}}</td>
+
+              </tr>
+            {% endfor %}
+
+            </tbody>
+          </table>
+          {% endblock %}
+
+    </body>
+</html>
